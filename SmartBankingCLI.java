@@ -1,3 +1,4 @@
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class SmartBankingCLI{
@@ -21,6 +22,7 @@ public class SmartBankingCLI{
         final String PRINT_STATEMENT = "🖨 Bank Statement \u25B9 \u25B6 ";
         final String DELETE_ACC = " ␡ Delete Account \u25B9 \u25B6 ";
         
+        String[] accId = new String[0];
         String[] accHolders = new String[0];
         double[] accBal = new double[0];
 
@@ -45,13 +47,13 @@ public class SmartBankingCLI{
                     System.out.println("\t[4]. Transfer");
                     System.out.println("\t[5]. Print Statement");
                     System.out.println("\t[6]. Delete Account");
-                    System.out.println("\t[4]. Exit\n");
+                    System.out.println("\t[7]. Exit\n");
 
                     System.out.print("\tEnter an option to continue: ");
                     int option = SCANNER.nextInt();
                     SCANNER.nextLine();
 
-                    switch (option){
+                    switch (option){ 
                         
                         case 1: screen = CREATE_ACC; break;
                         case 2: screen = DEPOSITS; break;
@@ -65,7 +67,110 @@ public class SmartBankingCLI{
                 
                 //Create Account        
                 case CREATE_ACC :
+                    boolean valid = true;
+                    String id;
+                    String name;
+                    double balance=0;   
+            
+                    
+                    loop1: 
+                    do{
+
+                        // Generate auto ID & store in temp var.
+                        id = String.format("SDB-%05d", (accId.length + 1));
+                        System.out.print("\tID :"+id+ "\n");
+
+                        // Get name and store in temp var.
+                        valid = true;
+                        System.out.print("\tName: ");
+                        name = SCANNER.nextLine().strip();
+
                         
+
+                        if (name.isBlank()){  //Check whether the name is empty
+                            System.out.printf(ERROR_MSG, "Name can't be empty");
+                            valid = false;
+                            continue loop1;
+                        }
+
+                        for (int i = 0; i < name.length(); i++) { // check A-Z a-z spaces invalidity
+                            if (!(Character.isLetter(name.charAt(i)) || 
+                                Character.isSpaceChar(name.charAt(i))) ) {
+                                System.out.printf(ERROR_MSG, "Invalid Name");
+                                valid = false;
+                                continue loop1;
+                            }
+
+                        }
+                        
+                        loop2: 
+                        do { // Get initial deposit and store in temp var.
+                            System.out.print("\tInitial Deposit : ");
+                            balance = SCANNER.nextDouble();
+                            SCANNER.nextLine();
+                            valid=true;
+
+
+                            if (balance<5000){  //Check whether the initial Deposit is higher than 5000/= 
+                                System.out.printf(ERROR_MSG, "Insufficient initial deposit"); 
+                                valid = false;
+                                continue loop2;
+                            }
+                            
+                        } while (!valid);
+
+                    ///// Save acc holder id from temp var. to accId Array
+                    String[] newAccId= new String[accId.length + 1];
+                    for (int i = 0; i < accId.length; i++) {
+                        newAccId[i] = accId[i];
+                    }
+                    newAccId[newAccId.length -1] = id;
+                    accId = newAccId;
+
+                    ///// Save acc holder name from temp var. to accHolders Array
+                    String[] newAccHolders = new String[accHolders.length + 1];
+                    for (int i = 0; i < accHolders.length; i++) {
+                        newAccHolders[i] = accHolders[i];
+                    }
+                    newAccHolders[newAccHolders.length -1] = name;
+                    accHolders = newAccHolders;
+
+                    ///// Save acc holder's initial deposit amount from temp var. to accBal Array
+                    double [] newAccBal = new double[accBal.length + 1];
+                    for (int i = 0; i < accBal.length; i++) {
+                        newAccBal[i] = accBal[i];
+                    }
+                    newAccBal[newAccBal.length -1] = balance;
+                    accBal = newAccBal;
+
+
+                    //Re-enter or Return to the dashboard
+                    System.out.println();
+                    System.out.printf("\tID: %s %s has been created successfully.\n\tDo you want to add another (Y/n)? ", id,name);
+                    if (SCANNER.nextLine().strip().toUpperCase().equals("Y")) continue;
+                    screen = DASHBOARD;
+                        
+                                                
+                    }while(!valid);
+                    
+                    break;
+                
+                //Deposit        
+                case DEPOSITS :
+
+                //Withdrawals       
+                case WITHDRAWALS :
+
+                //Transfer       
+                case TRANSFER :
+
+                //Print Statement      
+                case PRINT_STATEMENT :
+
+                //Delete Account        
+                case DELETE_ACC :
+
+                                       
 
             }
 
