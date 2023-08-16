@@ -27,7 +27,7 @@ public class SmartBankingCLI{
         double[] accBal = new double[0];
 
         String screen = DASHBOARD;
-
+        int idLast=0;
        
         do {
 
@@ -70,14 +70,16 @@ public class SmartBankingCLI{
                     boolean valid = true;
                     String id;
                     String name;
-                    double balance=0;   
+                    double balance=0; 
+                    
+                      
             
                     
                     loop1: 
                     do{
 
                         // Generate auto ID & store in temp var.
-                        id = String.format("SDB-%05d", (accId.length + 1));
+                        id = String.format("SDB-%05d", (idLast + 1));
                         System.out.print("\tID :"+id+ "\n");
 
                         // Get name and store in temp var.
@@ -143,7 +145,7 @@ public class SmartBankingCLI{
                     newAccBal[newAccBal.length -1] = balance;
                     accBal = newAccBal;
 
-
+                    idLast++;
                     //Re-enter or Return to the dashboard
                     System.out.println();
                     System.out.printf("\tID: %s %s has been created successfully.\n\tDo you want to add another (Y/n)? ", id,name);
